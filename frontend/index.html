@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NOVA — Net Asset & Opportunity Valuation Agent</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <!-- Chart.js via CDN para gráficos interativos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-logo">N</div>
+        <div class="brand-text">
+          <h1>NOVA</h1>
+          <p>Net Asset & Opportunity Valuation Agent</p>
+        </div>
+      </div>
+      <div class="system-status-pill">
+        <div class="status-dot"></div>
+        <span>Orquestrador Multi-Agente Ativo</span>
+      </div>
+    </header>
+
+    <!-- Indicadores de Saúde do Portfólio -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div>
+          <div class="kpi-label">Valor Total do Portfólio</div>
+          <div class="kpi-value" id="kpi-portfolio-value">$0.00</div>
+        </div>
+        <div class="kpi-subtext">Soma de todos os ativos cadastrados</div>
+      </div>
+      <div class="kpi-card">
+        <div>
+          <div class="kpi-label">Retorno Médio Anualizado</div>
+          <div class="kpi-value" id="kpi-portfolio-yield">0.00%</div>
+        </div>
+        <div class="kpi-subtext">Média ponderada pós-taxas e inflação</div>
+      </div>
+      <div class="kpi-card">
+        <div>
+          <div class="kpi-label">Risco do Portfólio</div>
+          <div class="kpi-value" id="kpi-portfolio-risk" style="background: linear-gradient(135deg, #fff, #ff8080); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">N/A</div>
+        </div>
+        <div class="kpi-subtext">Nível de volatilidade médio</div>
+      </div>
+    </section>
+
+    <!-- Workspace Principal -->
+    <main class="main-workspace">
+      <!-- Coluna da Esquerda (Configuração) -->
+      <section class="configurator-panel">
+        <!-- Adicionar Ativo -->
+        <div class="panel-card">
+          <div class="panel-title">Cadastrar Novo Ativo</div>
+          <form id="asset-form">
+            <div class="form-group">
+              <label for="asset-name">Nome do Ativo / Oportunidade</label>
+              <input type="text" id="asset-name" placeholder="Ex: Galpão Logístico" required class="form-control">
+            </div>
+            
+            <div class="form-group">
+              <label for="asset-type">Classe do Ativo</label>
+              <select id="asset-type" required>
+                <option value="real_estate">Imóvel de Aluguel (Real Estate)</option>
+                <option value="fixed_income">Título de Renda Fixa</option>
+                <option value="equity">Investimento em Ações (Equity)</option>
+                <option value="project">Projeto de Expansão Corporativo</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="asset-investment">Investimento Inicial ($)</label>
+              <input type="number" id="asset-investment" placeholder="Ex: 250000" required min="1" step="any" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="asset-current-value">Valor Atualizado ($)</label>
+              <input type="number" id="asset-current-value" placeholder="Ex: 250000 (Opcional)" step="any" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label for="asset-liquidity">Liquidez</label>
+              <select id="asset-liquidity">
+                <option value="high">Alta (D+0 a D+5)</option>
+                <option value="medium" selected>Média (D+30 a D+90)</option>
+                <option value="low">Baixa (Anos ou Sem Liquidez)</option>
+              </select>
+            </div>
+
+            <!-- Campos Dinâmicos específicos de cada classe -->
+            <div id="dynamic-fields" class="dynamic-fields-wrapper">
+              <!-- Renderizado via JS -->
+            </div>
+
+            <button type="submit" class="btn btn-primary">Adicionar ao Portfólio</button>
+          </form>
+        </div>
+
+        <!-- Ativos Cadastrados -->
+        <div class="panel-card">
+          <div class="panel-title">Seus Ativos</div>
+          <div class="asset-list" id="registered-assets-list">
+            <!-- Renderizado via JS -->
+            <p style="text-align: center; color: var(--color-text-muted); font-size: 0.85rem; padding: 10px;">Nenhum ativo cadastrado.</p>
+          </div>
+          <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 10px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label for="compare-query">Contexto / Pergunta para Comparação</label>
+              <input type="text" id="compare-query" placeholder="Ex: Qual ativo oferece melhor retorno para médio prazo?" class="form-control" style="background: rgba(10, 15, 30, 0.9);">
+            </div>
+            <button id="btn-compare" class="btn btn-primary" style="background: linear-gradient(135deg, var(--color-accent), #00b3b3); box-shadow: 0 4px 15px rgba(0, 179, 179, 0.2);">Comparar Oportunidades</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coluna da Direita (Arena de Comparação) -->
+      <section class="comparison-arena" id="comparison-arena-section">
+        <!-- Mensagem de Boas-vindas Inicial -->
+        <div class="panel-card welcome-arena-card" id="arena-welcome-view">
+          <div class="welcome-arena-icon">⚖️</div>
+          <h2>Arena de Decisão do NOVA</h2>
+          <p style="max-width: 500px; margin-top: 10px;">Selecione duas ou mais oportunidades e clique no botão **Comparar Oportunidades** para ativar a modelagem estatística Monte Carlo e a análise multi-agente.</p>
+        </div>
+
+        <!-- Spinner de Carregamento -->
+        <div class="panel-card loader-wrapper" id="arena-loading-view" style="display: none;">
+          <div class="spinner"></div>
+          <h3 style="color: var(--color-primary);">Orquestrando Multi-Agentes...</h3>
+          <p style="color: var(--color-text-muted); font-size: 0.85rem;">Calculando VPLs, TIRs e rodando 1.000 iterações Monte Carlo.</p>
+        </div>
+
+        <!-- Painel de Resultados Completo -->
+        <div id="arena-results-view" style="display: none;">
+          <!-- Gráficos de barras e Monte Carlo -->
+          <div class="arena-charts-row">
+            <div class="chart-box">
+              <h4 style="margin-bottom: 10px; font-size: 0.95rem; color: var(--color-primary);">VPL / Retorno Médio Anualizado</h4>
+              <canvas id="chart-returns"></canvas>
+            </div>
+            <div class="chart-box">
+              <h4 style="margin-bottom: 10px; font-size: 0.95rem; color: var(--color-accent);">Densidade de Probabilidade (Monte Carlo)</h4>
+              <canvas id="chart-montecarlo"></canvas>
+            </div>
+          </div>
+
+          <!-- Tabela de Ranking MCDA -->
+          <div class="panel-card ranking-table-wrapper">
+            <h3 style="margin-bottom: 1rem; color: var(--color-primary); display: flex; align-items: center; gap: 8px;">
+              📊 Matriz de Decisão Multicritério (MCDA)
+            </h3>
+            <table class="ranking-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Ativo / Projeto</th>
+                  <th>Classe</th>
+                  <th>Score Retorno</th>
+                  <th>Score Risco</th>
+                  <th>Score Liquidez</th>
+                  <th>Pontuação Total</th>
+                </tr>
+              </thead>
+              <tbody id="ranking-table-body">
+                <!-- Preenchido via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Advisor Insights Block -->
+          <div class="advisor-terminal">
+            <div class="terminal-header">
+              <span>
+                <span class="status-dot" style="background-color: var(--color-primary); box-shadow: 0 0 10px var(--color-primary);"></span>
+                AI Investment Advisor Agent
+              </span>
+              <span>PT-BR (Narrativa Analítica)</span>
+            </div>
+            <div class="terminal-body" id="advisor-narrative-content">
+              <!-- Resposta formatada renderizada aqui -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

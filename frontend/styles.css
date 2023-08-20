@@ -1,0 +1,577 @@
+/* Google Fonts - Inter & Outfit */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Cores Principais */
+  --color-bg-base: hsl(222, 47%, 7%);        /* Deep Navy Blue */
+  --color-surface: hsla(222, 47%, 12%, 0.75); /* Dark Slate Glass */
+  --color-surface-hover: hsla(222, 47%, 16%, 0.85);
+  --color-primary: hsl(45, 100%, 50%);       /* Pure Gold */
+  --color-primary-glow: hsla(45, 100%, 50%, 0.15);
+  --color-accent: hsl(190, 90%, 50%);        /* Cyan/Electric Blue */
+  --color-border: hsla(45, 100%, 50%, 0.15); /* Sutil borda dourada */
+  --color-border-active: hsla(190, 90%, 50%, 0.4);
+  
+  /* Estados */
+  --color-success: hsl(140, 80%, 45%);
+  --color-danger: hsl(350, 80%, 50%);
+  --color-warning: hsl(45, 100%, 50%);
+  
+  /* Tipografia */
+  --color-text-main: hsl(210, 20%, 98%);
+  --color-text-muted: hsl(215, 15%, 75%);
+  
+  /* Efeitos Glass */
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(14px);
+  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Reset Geral */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg-base);
+  background-image: 
+    radial-gradient(at 10% 20%, hsla(222, 47%, 12%, 0.8) 0px, transparent 50%),
+    radial-gradient(at 90% 80%, hsla(222, 50%, 15%, 0.6) 0px, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(45, 100%, 50%, 0.04) 0px, transparent 40%);
+  color: var(--color-text-main);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .brand-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* Scrollbar Customizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: hsla(45, 100%, 50%, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Layout Estrutural */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header Premium */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid hsla(210, 20%, 98%, 0.08);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(45, 100, 50, 0.3);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--color-bg-base);
+}
+
+.brand-text h1 {
+  font-size: 1.8rem;
+  background: linear-gradient(to right, #ffffff, #ffe066);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-text p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.system-status-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  box-shadow: var(--glass-shadow);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-success);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-success);
+}
+
+/* Grid de Indicadores de Saúde do Portfólio (KPIs) */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.kpi-card {
+  background: var(--color-surface);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transition-smooth);
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 224, 102, 0.35);
+  box-shadow: 0 12px 40px 0 rgba(45, 100, 50, 0.08);
+}
+
+.kpi-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #fff, #ffe066);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.kpi-subtext {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Painel Principal de Trabalho (Configuração & Arena) */
+.main-workspace {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .main-workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Configurator (Lado Esquerdo) */
+.configurator-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.panel-card {
+  background: var(--color-surface);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 1.8rem;
+  box-shadow: var(--glass-shadow);
+}
+
+.panel-title {
+  font-size: 1.25rem;
+  margin-bottom: 1.2rem;
+  color: #fff;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Formulário de Ativos */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.form-control, select {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(10, 15, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.form-control:focus, select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 10px rgba(190, 90, 50, 0.2);
+}
+
+/* Inputs Dinâmicos */
+.dynamic-fields-wrapper {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.2rem;
+  border: 1px dashed rgba(255, 224, 102, 0.1);
+}
+
+/* Botões Premium */
+.btn {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary), #d4af37);
+  color: var(--color-bg-base);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #ffeb99, var(--color-primary));
+  box-shadow: 0 6px 20px rgba(255, 224, 102, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: hsl(350, 90%, 55%);
+}
+
+/* Listagem de Ativos Cadastrados */
+.asset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.asset-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  transition: var(--transition-smooth);
+}
+
+.asset-item:hover {
+  background: rgba(255, 224, 102, 0.03);
+  border-color: rgba(255, 224, 102, 0.2);
+}
+
+.asset-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.asset-item-title {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.asset-item-subtitle {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.asset-item-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--color-primary);
+}
+
+.btn-delete-asset {
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  cursor: pointer;
+  opacity: 0.6;
+  transition: var(--transition-smooth);
+}
+
+.btn-delete-asset:hover {
+  opacity: 1.0;
+}
+
+/* Arena de Comparação (Lado Direito) */
+.comparison-arena {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.welcome-arena-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-muted);
+  border: 2px dashed rgba(255, 224, 102, 0.15);
+}
+
+.welcome-arena-icon {
+  font-size: 3.5rem;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px var(--color-primary-glow);
+}
+
+/* Resultados Ativos na Arena */
+.arena-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .arena-charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  height: 320px;
+}
+
+/* Tabela de Ranking */
+.ranking-table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ranking-table th {
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ranking-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.9rem;
+}
+
+.ranking-row-gold {
+  background: rgba(255, 224, 102, 0.03);
+}
+
+.ranking-row-gold td:first-child {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-real_estate { background: rgba(255, 127, 80, 0.2); color: coral; }
+.badge-fixed_income { background: rgba(30, 144, 255, 0.2); color: dodgerblue; }
+.badge-equity { background: rgba(138, 43, 226, 0.2); color: blueviolet; }
+.badge-project { background: rgba(46, 139, 87, 0.2); color: seagreen; }
+
+/* Advisor Insights Block (Terminal Dourado) */
+.advisor-terminal {
+  background: linear-gradient(135deg, hsl(222, 47%, 5%), hsl(222, 47%, 8%));
+  border: 1.5px solid var(--color-primary);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(212, 175, 55, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.advisor-terminal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to right, var(--color-primary), var(--color-accent));
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  font-family: 'Outfit', sans-serif;
+  color: var(--color-primary);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+  padding-bottom: 10px;
+}
+
+.terminal-header span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-body {
+  font-size: 0.95rem;
+  color: hsl(210, 20%, 95%);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.terminal-body h1, .terminal-body h2, .terminal-body h3, .terminal-body h4 {
+  color: var(--color-primary);
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.terminal-body p {
+  margin-bottom: 1.2rem;
+  line-height: 1.7;
+}
+
+.terminal-body ul, .terminal-body ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.terminal-body li {
+  margin-bottom: 0.4rem;
+}
+
+.terminal-body blockquote {
+  border-left: 4px solid var(--color-primary);
+  background: rgba(212, 175, 55, 0.05);
+  padding: 15px;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 0;
+}
+
+/* Spinner de Carregamento */
+.loader-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  gap: 15px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(212, 175, 55, 0.2);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
