@@ -44,4 +44,3 @@ if os.environ.get("HOST"):
     settings.HOST = os.environ.get("HOST")
 if os.environ.get("ANTHROPIC_API_KEY"):
     settings.ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-

@@ -156,4 +156,3 @@ def delete_asset(id: int, db: Session = Depends(get_db)):
         db.rollback()
         logging.error(f"[API Assets] Erro ao deletar ativo {id}: {e}")
         raise HTTPException(status_code=500, detail="Erro interno ao tentar remover o ativo.")
-
