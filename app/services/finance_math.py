@@ -223,4 +223,3 @@ def run_monte_carlo(
         "loss_probability": loss_prob,
         "raw_distribution": [float(v) for v in returns_arr[:100]] # Envia subset de 100 pontos para plotar curva
     }
-

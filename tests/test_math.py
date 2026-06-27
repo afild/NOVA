@@ -70,4 +70,3 @@ def test_run_monte_carlo():
     assert "loss_probability" in res
     assert len(res["raw_distribution"]) > 0
     assert 0.0 <= res["loss_probability"] <= 1.0
-
