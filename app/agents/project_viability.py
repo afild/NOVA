@@ -74,4 +74,3 @@ def run_project_viability_agent(state: Dict[str, Any]) -> Dict[str, Any]:
         logging.info(f"[Project Viability Agent] Projeto {asset['name']} calculado: NPV={npv:.2f}, IRR={irr*100:.2f}%, Payback={payback_results['payback_discounted']:.2f} anos")
         
     return state
-

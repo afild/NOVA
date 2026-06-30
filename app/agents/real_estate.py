@@ -76,4 +76,3 @@ def run_real_estate_agent(state: Dict[str, Any]) -> Dict[str, Any]:
         logging.info(f"[Real Estate Agent] Imóvel {asset['name']} calculado: Cap Rate={cap_rate*100:.2f}%, Cash-on-Cash={cash_on_cash*100:.2f}%")
         
     return state
-
