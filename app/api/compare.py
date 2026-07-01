@@ -102,4 +102,3 @@ def get_comparison_history(limit: int = 10, db: Session = Depends(get_db)):
     except Exception as e:
         logging.error(f"[API Compare] Erro ao carregar histórico: {e}")
         raise HTTPException(status_code=500, detail="Erro interno ao consultar o histórico.")
-

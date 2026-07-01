@@ -37,4 +37,3 @@ def setup_test_db():
             db_file.unlink()
         except Exception:
             pass
-

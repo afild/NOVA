@@ -199,4 +199,3 @@ def get_asset_metrics(id: int, db: Session = Depends(get_db)):
     except Exception as e:
         logging.error(f"[API Analysis] Erro ao carregar métricas para ativo {id}: {e}")
         raise HTTPException(status_code=500, detail="Erro interno ao calcular as métricas.")
-
