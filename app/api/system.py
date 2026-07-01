@@ -32,4 +32,3 @@ def check_market_rates():
                 "inflation_rate": 0.0300
             }
         }
-
