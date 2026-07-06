@@ -77,4 +77,3 @@ if __name__ == "__main__":
     import uvicorn
     # reload=False para consistência local de instâncias de base única
     uvicorn.run("app.main:app", host=host, port=port, reload=False)
-

@@ -29,4 +29,3 @@ CREATE TABLE IF NOT EXISTS simulation_results (
     metrics_json        TEXT NOT NULL, -- resultados (ex: p10, p50, p90 de retorno, probabilidade de perda)
     created_at          DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
