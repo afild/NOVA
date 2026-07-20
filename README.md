@@ -11,9 +11,17 @@
 
 NOVA is an open-source net asset and opportunity valuation agent. It registers multi-class asset portfolios, computes rigorous financial metrics (DCF, IRR, NPV, Cap Rate, Payback), models investment scenarios with Monte Carlo simulation, and delivers AI-generated investment narratives — all running locally through a seven-agent LangGraph orchestration layer.
 
+## How It Works — Módulos Avançados
+
+O NOVA foi recentemente expandido (Evolution) para se tornar uma plataforma preditiva autônoma:
+- **Data Sync Engine:** Ingestão autônoma de contas bancárias e contabilidade via integrações com *outras plataformas* do mercado, eliminando inserção manual de dados.
+- **Interactive Scenario Engine:** WebSockets streamando simulações de Monte Carlo em tempo real para painéis dinâmicos.
+- **Sentinel Agent:** Monitoramento contínuo de background que audita condições macroeconômicas (taxas de juros, mercado imobiliário) usando *outras plataformas* e dispara alertas de refinanciamento.
+- **Capital Matchmaker & AI Export Engine:** Cruza os resultados das valuations com perfis de crédito SBA 7(a) ou Private Equity e exporta documentos em HTML/PDF no formato 'Pitch Deck'.
+
 ---
 
-## How It Works — Three Integrated Layers
+## Technical Architecture
 
 ![NOVA Three-Layer Architecture](docs/images/layers.png)
 
@@ -53,8 +61,9 @@ Output: Investment narrative · comparative analysis · project viability score 
 ```mermaid
 graph TD
     A["Asset Input<br/>(Real Estate · Fixed Income · Projects)"] --> B["Asset Registry Agent<br/>app/agents/asset_registry.py"]
+    SYNC["Data Sync<br/>app/services/data_sync.py"] -.-> B
     B --> C[("SQLite Database<br/>nova_assets.db")]
-    D["yfinance Market Data"] --> E
+    D["yfinance / Outras Plataformas"] --> E
     C --> E["Real Estate Agent<br/>app/agents/real_estate.py<br/>Cap Rate · GRM"]
     C --> F["Fixed Income Agent<br/>app/agents/fixed_income.py<br/>Yield · Duration"]
     C --> G["Project Viability Agent<br/>app/agents/project_viability.py<br/>NPV · IRR · Payback"]
@@ -62,11 +71,16 @@ graph TD
     F --> H
     G --> H
     H --> I["Scenario Modeling<br/>app/agents/scenario_modeling.py<br/>Monte Carlo · scipy"]
+    I -.->|"WebSockets"| M
     H --> J["Comparative Decision<br/>app/agents/comparative_decision.py"]
     H --> K["AI Advisor<br/>app/agents/ai_advisor.py<br/>Claude LLM / Offline"]
+    K --> MMATCH["Capital Matchmaker<br/>app/agents/capital_matchmaker.py"]
+    K --> EXPORT["Export Engine<br/>app/services/export_engine.py"]
     H --> L["FastAPI Backend<br/>app/main.py · Port 8004"]
     L --> M["REST API /api"]
     M --> N["Glassmorphic Dashboard<br/>frontend/ · Chart.js"]
+    
+    SENTINEL["Sentinel Agent<br/>Background Monitor"] -.->|"Alerts"| C
 ```
 
 ### REST API Surface
@@ -239,7 +253,15 @@ Areas where contributions are most needed:
 
 ## Changelog
 
-### Latest: v0.1.0
+### Latest: v0.2.0
+- Evolution Framework: Integração autônoma de dados e sincronização
+- Motor Interativo Monte Carlo (WebSockets)
+- Sentinel Agent para monitoramento contínuo em background
+- Gerador de Pitch Deck e SBA Loan Annex (HTML)
+- Agente Capital Matchmaker
+- Remoção de dependências de terceiros nominais no README
+
+### v0.1.0
 - Full valuation pipeline: asset registry, financial computation, scenario modeling, AI advisor
 
 ---

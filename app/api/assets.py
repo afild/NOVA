@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import text
 from pydantic import BaseModel, Field
 from app.database.db_manager import get_db
+from app.services.data_sync import sync_bank_transactions, sync_accounting_balance
 
 router = APIRouter(prefix="/assets", tags=["Assets"])
 
@@ -156,3 +157,31 @@ def delete_asset(id: int, db: Session = Depends(get_db)):
         db.rollback()
         logging.error(f"[API Assets] Erro ao deletar ativo {id}: {e}")
         raise HTTPException(status_code=500, detail="Erro interno ao tentar remover o ativo.")
+
+@router.post("/sync/{id}", response_model=Dict[str, Any])
+def sync_asset_data(id: int, db: Session = Depends(get_db)):
+    """Sincroniza os dados do ativo usando integrações com outras plataformas."""
+    try:
+        # Verifica se existe
+        check = db.execute(text("SELECT id, type, metadata FROM assets WHERE id = :id"), {"id": id}).fetchone()
+        if not check:
+            raise HTTPException(status_code=404, detail="Ativo não encontrado.")
+            
+        asset_type = check[1]
+        
+        # Simula sincronização via data_sync
+        if asset_type == "project":
+            sync_data = sync_accounting_balance(f"company_{id}")
+        else:
+            sync_data = sync_bank_transactions(f"account_{id}")
+            
+        return {
+            "status": "success",
+            "message": "Sincronização concluída com sucesso via outras plataformas.",
+            "synced_data": sync_data
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"[API Assets] Erro ao sincronizar ativo {id}: {e}")
+        raise HTTPException(status_code=500, detail="Erro interno ao tentar sincronizar o ativo.")

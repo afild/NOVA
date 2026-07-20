@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from app.api.router import api_router
+from app.api.websockets import router as ws_router
 from app.database.db_manager import init_db
 from app.config import settings
 
@@ -28,7 +29,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="NOVA API",
     description="Net Asset & Opportunity Valuation Agent Backend",
-    version="0.1.0",
+    version="0.2.0",
     lifespan=lifespan,
     debug=settings.DEBUG
 )
@@ -44,6 +45,9 @@ app.add_middleware(
 
 # Registra as rotas da API
 app.include_router(api_router, prefix="/api")
+
+# Registra rotas de WebSocket
+app.include_router(ws_router)
 
 # Redireciona a rota raiz para o index do dashboard estático
 @app.get("/")

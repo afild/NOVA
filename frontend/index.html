@@ -103,7 +103,10 @@
 
         <!-- Ativos Cadastrados -->
         <div class="panel-card">
-          <div class="panel-title">Seus Ativos</div>
+          <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center;">
+            Seus Ativos
+            <button id="btn-sync-all" class="btn btn-primary" style="font-size: 0.8rem; padding: 4px 8px; background: transparent; border: 1px solid var(--color-primary); color: var(--color-primary);">🔄 Sincronizar via Plataformas</button>
+          </div>
           <div class="asset-list" id="registered-assets-list">
             <!-- Renderizado via JS -->
             <p style="text-align: center; color: var(--color-text-muted); font-size: 0.85rem; padding: 10px;">Nenhum ativo cadastrado.</p>
@@ -183,6 +186,12 @@
             <div class="terminal-body" id="advisor-narrative-content">
               <!-- Resposta formatada renderizada aqui -->
             </div>
+          </div>
+          
+          <!-- Botões de Ações Avançadas -->
+          <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="btn-export-deck" class="btn btn-primary" style="background: transparent; border: 1px solid var(--color-accent); color: var(--color-accent); display: none;">Exportar Pitch Deck</button>
+            <button id="btn-matchmake" class="btn btn-primary" style="background: transparent; border: 1px solid #ffaa00; color: #ffaa00; display: none;">Buscar Match de Capital</button>
           </div>
         </div>
       </section>

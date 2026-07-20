@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("asset-type").addEventListener("change", initDynamicFields);
     document.getElementById("asset-form").addEventListener("submit", createAsset);
     document.getElementById("btn-compare").addEventListener("click", runComparison);
+    document.getElementById("btn-sync-all").addEventListener("click", syncAllAssets);
+    document.getElementById("btn-export-deck").addEventListener("click", exportDeck);
+    document.getElementById("btn-matchmake").addEventListener("click", matchmakeAsset);
 });
 
 // 1. Renderiza campos dinâmicos no formulário de cadastro
@@ -379,6 +382,13 @@ function renderComparisonResults(data) {
     // B. Renderiza a recomendação do Advisor no Terminal Dourado (Markdown parser simplificado)
     document.getElementById("advisor-narrative-content").innerHTML = parseMarkdown(data.recommendation);
     
+    // Mostra botões avançados se houver ranking
+    if (data.ranking && data.ranking.length > 0) {
+        window.lastRankedAssetId = data.ranking[0].id; // Salva o Top 1
+        document.getElementById("btn-export-deck").style.display = "inline-block";
+        document.getElementById("btn-matchmake").style.display = "inline-block";
+    }
+    
     // C. Desenha Gráficos interativos via Chart.js
     const labels = data.ranking.map(r => r.name);
     const returnsData = data.ranking.map(r => r.estimated_annual_return * 100.0);
@@ -569,3 +579,66 @@ function parseMarkdown(md) {
     
     return html;
 }
+
+// 13. Sync All Assets via Outras Plataformas
+async function syncAllAssets() {
+    const checkboxes = document.querySelectorAll(".asset-item-checkbox:checked");
+    const assetIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.id));
+    
+    if (assetIds.length === 0) {
+        alert("Nenhum ativo selecionado para sincronizar.");
+        return;
+    }
+    
+    const btn = document.getElementById("btn-sync-all");
+    btn.innerText = "Sincronizando...";
+    btn.disabled = true;
+    
+    for (const id of assetIds) {
+        try {
+            await fetch(`/api/assets/sync/${id}`, { method: "POST" });
+        } catch (e) {
+            console.error("Falha ao sync ativo", id, e);
+        }
+    }
+    
+    alert("Sincronização com outras plataformas concluída.");
+    btn.innerText = "🔄 Sincronizar via Plataformas";
+    btn.disabled = false;
+    fetchAssets();
+}
+
+// 14. Export Pitch Deck
+async function exportDeck() {
+    if (!window.lastRankedAssetId) return;
+    
+    window.open(`/api/export/${window.lastRankedAssetId}`, '_blank');
+}
+
+// 15. Matchmake Capital
+async function matchmakeAsset() {
+    if (!window.lastRankedAssetId) return;
+    
+    const btn = document.getElementById("btn-matchmake");
+    btn.innerText = "Buscando...";
+    
+    try {
+        const res = await fetch(`/api/matchmake/${window.lastRankedAssetId}`, { method: "POST" });
+        const data = await res.json();
+        
+        let msg = "Resultados de Capital Matchmaking:\\n\\n";
+        data.matches.forEach(m => {
+            msg += `- Programa: ${m.program_name}\\n`;
+            msg += `  Montante Máx: $${m.max_amount}\\n`;
+            msg += `  Taxa: ${m.interest_rate}\\n`;
+            msg += `  Aderência: ${m.match_score}\\n\\n`;
+        });
+        
+        alert(msg);
+    } catch (e) {
+        alert("Falha ao buscar matchmaking.");
+    }
+    
+    btn.innerText = "Buscar Match de Capital";
+}
+
